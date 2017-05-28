@@ -34,13 +34,30 @@ export class TodoService {
             .catch(this.handleError);
 
   }
-
+/*
   toggleTodo(todo:Todo): Promise<Todo> {
     const url = `${this.api_url}/${todo.id}`;
     console.log(url);
     let updatedTodo = Object.assign({}, todo, {completed: !todo.completed});
     return this.http
             .put(url, JSON.stringify(updatedTodo), {headers: this.headers})
+            .toPromise()
+            .then(() => updatedTodo)
+            .catch(this.handleError);
+  }
+  */
+  // It was PUT /todos/:id before
+  // But we will use PATCH /todos/:id instead
+  // Because we don't want to waste the bytes those don't change
+  /**
+   * 原来的put方法是将整个todo数据上传，但其实我们只改动了todo.completed属性。
+   * 如果你的web api是符合REST标准的话，我们可以用Http的PATCH方法而不是PUT方法，PATCH方法会只上传变化的数据。
+   */
+  toggleTodo(todo: Todo): Promise<Todo> {
+    const url = `${this.api_url}/${todo.id}`;
+    let updatedTodo = Object.assign({}, todo, {completed: !todo.completed});
+    return this.http
+            .patch(url, JSON.stringify({completed: !todo.completed}), {headers: this.headers})
             .toPromise()
             .then(() => updatedTodo)
             .catch(this.handleError);
@@ -63,6 +80,25 @@ export class TodoService {
             .catch(this.handleError);
   }
 
+  // GET /todos?completed=true/false
+  filterTodos(filter: string): Promise<Todo[]> {
+    switch(filter){
+      case 'ACTIVE': return this.http
+                        .get(`${this.api_url}?completed=false`)
+                        .toPromise()
+                        .then(res => res.json() as Todo[])
+                        .catch(this.handleError);
+      case 'COMPLETED': return this.http
+                          .get(`${this.api_url}?completed=true`)
+                          .toPromise()
+                          .then(res => res.json() as Todo[])
+                          .catch(this.handleError);
+      default:
+        return this.getTodos();
+    }
+  }
+
+  
   private handleError(error: any): Promise<any>{
     console.error('an error occurred', error);
     return Promise.reject(error.message || error);

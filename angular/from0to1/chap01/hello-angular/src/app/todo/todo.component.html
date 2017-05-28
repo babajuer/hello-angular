@@ -1,4 +1,5 @@
-<div>
+<div style="border: 1px solid red">
+  old version
   <input type="text" [(ngModel)]="desc" (keyup.enter)="addTodo()">
   <ul>
     <li *ngFor="let todo of todos">{{ todo.desc }}</li>
@@ -6,8 +7,8 @@
 </div>
 
 
-<section class="todoapp">
-
+<section class="todoapp" style="border: 1px solid green">
+new version
 <app-todo-header 
     placeholder="What do you want"
     delay="100"
@@ -16,17 +17,19 @@
 </app-todo-header>
 
   
-  <section class="main" *ngIf="todos?.length > 0">
-    <input class="toggle-all" type="checkbox">
-    <ul class="todo-list">
-      <li *ngFor="let todo of todos" [class.completed]="todo.completed">
-        <div class="view">
-          <input class="toggle" type="checkbox" (click)="toggleTodo(todo)" [checked]="todo.completed">
-          <label (click)="toggleTodo(todo)">{{todo.desc}}</label>
-          <button class="destroy" (click)="removeTodo(todo); $event.stopPropagation()"></button>
-        </div>
-      </li>
-    </ul>
-  </section>
-  <app-todo-footer [itemCount]="todos?.length"> </app-todo-footer>
+  <app-todo-list
+    [todos]="todos"
+    (onRemoveTodo)="removeTodo($event)"
+    (onToggleTodo)="toggleTodo($event)"
+    (onToggleAll)="toggleAll()"
+    >
+  </app-todo-list>
+
+
+
+  <app-todo-footer 
+    [itemCount]="todos?.length" 
+    (onClear) = "clearCompleted()"> 
+
+  </app-todo-footer>
 </section>

@@ -2,9 +2,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { TodoComponent } from './todo.component';
 
 export const routes: Routes = [
-
- {
+  {
     path: 'todo',
+    redirectTo: 'todo/ALL'
+  },
+ {
+    path: 'todo/:filter',
     component: TodoComponent
   }
 
