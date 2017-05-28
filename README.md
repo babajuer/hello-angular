@@ -4,3 +4,6 @@
 #### http://www.jianshu.com/p/e7dc5d111667
 
 个人练习代码在  angular/from0to1/chap01/hello-angular
+
+进度记录：
+完成： chapter4， 更真实的web服务， 使用 json-server

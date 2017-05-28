@@ -9,7 +9,8 @@ export class TodoService {
 
   //定义你的假WebAPI地址，这个定义成什么都无所谓
   //只要确保是无法访问的地址就好
-  private api_url = 'apihahahahah/mockDatas';
+  // private api_url = 'apihahahahah/mockDatas';
+  private api_url = 'http://localhost:3000/todos';
   private headers = new Headers({'Content-Type': 'application/json'});
 
 
@@ -29,7 +30,7 @@ export class TodoService {
     return this.http
             .post(this.api_url, JSON.stringify(todo), {headers: this.headers})
             .toPromise()
-            .then(res => res.json().data as Todo)
+            .then(res => res.json() as Todo)
             .catch(this.handleError);
 
   }
@@ -58,7 +59,7 @@ export class TodoService {
   getTodos(): Promise<Todo[]> {
     return this.http.get(this.api_url)
             .toPromise()
-            .then(res => res.json().data as Todo[])
+            .then(res => res.json() as Todo[])
             .catch(this.handleError);
   }
 
